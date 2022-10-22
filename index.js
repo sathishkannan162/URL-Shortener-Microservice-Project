@@ -83,6 +83,8 @@ app.post("/api/shorturl", function (req, res) {
 
 //redirection
 app.get("/api/shorturl/:url", function (req, res) {
+  let numRegex = /^\d+$/;
+  if (numRegex.test(req.params.url)) {
   UrlModel.findOne({
     short_url: Number(req.params.url)
   })
@@ -97,6 +99,12 @@ app.get("/api/shorturl/:url", function (req, res) {
     }
   })
   .catch(err=>{console.log(err)});
+}
+else {
+  res.json({
+    error: "Wrong format"
+  });
+}
 });
 
 app.listen(port, function () {
