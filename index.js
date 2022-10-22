@@ -6,6 +6,7 @@ const app = express();
 require('./database');
 let UrlModel = require('./url');
 
+const dns = require('node:dns');
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
@@ -26,10 +27,28 @@ app.get('/api/hello', function(req, res) {
 });
 
 app.post('/api/shorturl',function(req,res){
-  res.json({
-    original_url: req.body.url,
-    short_url: Math.floor((Math.random()*20000) +1)
+  let url = req.body.url;
+  let httpsRegex = /^https?:\/\//i
+  if (httpsRegex.test(url)) {
+  url = url.replace(httpsRegex,'');
+  dns.lookup(url,function(err,address,family){
+    if (err) {
+      res.json({error: "Invalid URL"});
+    }
+    else {
+      res.json({
+        original_url: url,
+        short_url: Math.floor((Math.random()*20000) +1)
+      });
+    }
   });
+}
+
+
+else {
+  res.json({error: "Invalid URL"});
+}
+ 
 });
 
 app.listen(port, function() {
