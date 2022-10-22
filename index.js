@@ -29,10 +29,11 @@ app.get("/api/hello", function (req, res) {
 
 app.post("/api/shorturl", function (req, res) {
   let url = req.body.url;
-  let removehttps = /^https?:\/\//i
-  let httpsRegex = /^https?:\/\/.+.[.]\w+$/i;
+  let removehttps = /^https:\/\/([^/]*)\/.*/;
+  let httpsRegex = /^https?:\/\//i;
+  ///^https?:\/\/.+.[.]\w+$/i;
   if (httpsRegex.test(url)) {
-    url = url.replace(removehttps, "");
+    url = url.replace(removehttps, "$1");
     console.log(url);
     dns.lookup(url, function (err) {
       if (err) {
