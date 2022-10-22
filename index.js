@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 require("./database");
 let UrlModel = require("./url");
+require('./first_url_intiate')
 
 const dns = require("node:dns");
 // Basic Configuration
@@ -28,9 +29,11 @@ app.get("/api/hello", function (req, res) {
 
 app.post("/api/shorturl", function (req, res) {
   let url = req.body.url;
-  let httpsRegex = /^https?:\/\/.+.[.]com$/i;
+  let removehttps = /^https?:\/\//i
+  let httpsRegex = /^https?:\/\/.+.[.]\w+$/i;
   if (httpsRegex.test(url)) {
-    url = url.replace(httpsRegex, "");
+    url = url.replace(removehttps, "");
+    console.log(url);
     dns.lookup(url, function (err, address, family) {
       if (err) {
         res.json({ error: "Invalid Hostname" });
