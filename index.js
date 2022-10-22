@@ -28,12 +28,12 @@ app.get("/api/hello", function (req, res) {
 
 app.post("/api/shorturl", function (req, res) {
   let url = req.body.url;
-  let httpsRegex = /^https?:\/\//i;
+  let httpsRegex = /^https?:\/\/.+.[.]com$/i;
   if (httpsRegex.test(url)) {
     url = url.replace(httpsRegex, "");
     dns.lookup(url, function (err, address, family) {
       if (err) {
-        res.json({ error: "Invalid URL" });
+        res.json({ error: "Invalid Hostname" });
       } else {
         UrlModel.findOne({
           original_url: req.body.url,
@@ -56,7 +56,7 @@ app.post("/api/shorturl", function (req, res) {
                 })
                 .catch((err) => {
                   console.log(err);
-                  console.log("we have a error in save");
+                 
                 });
               
             }
@@ -69,22 +69,31 @@ app.post("/api/shorturl", function (req, res) {
           })
           .catch((err) => {
             console.log(err);
-            console.log("error in finding");
           });
       }
     });
+  }
+  else {
+    res.json({error: "Invalid URL"});
   } 
 });
 
 //redirection
 app.get("/api/shorturl/:url", function (req, res) {
-  if (req.params.url == 8) {
-    res.redirect("https://google.com");
-  } else {
-    res.json({
-      error: "No short URL found for the given input",
-    });
-  }
+  UrlModel.findOne({
+    short_url: Number(req.params.url)
+  })
+  .then(docs=>{
+    if (docs == null) {
+      res.json({
+            error: "No short URL found for the given input",
+          });
+    }
+    else {
+    res.redirect(docs.original_url);
+    }
+  })
+  .catch(err=>{console.log(err)});
 });
 
 app.listen(port, function () {
