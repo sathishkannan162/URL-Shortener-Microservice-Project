@@ -16,5 +16,14 @@
   "license": "MIT",
   "devDependencies": {
     "nodemon": "^2.0.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sathishkannan162/URL-Shortener-Microservice-Project.git"
+  },
+  "author": "Sathish Kannan, freecodecamp",
+  "bugs": {
+    "url": "https://github.com/sathishkannan162/URL-Shortener-Microservice-Project/issues"
+  },
+  "homepage": "https://github.com/sathishkannan162/URL-Shortener-Microservice-Project#readme"
 }
