@@ -43,12 +43,21 @@ app.post('/api/shorturl',function(req,res){
     }
   });
 }
-
-
 else {
   res.json({error: "Invalid URL"});
 }
- 
+});
+
+//redirection
+app.get('/api/shorturl/:url',function(req,res){
+  if (req.params.url== 8) {
+  res.redirect('https://google.com');
+  }
+  else {
+    res.json({
+      error: "No short URL found for the given input"
+    })
+  }
 });
 
 app.listen(port, function() {
