@@ -34,7 +34,7 @@ app.post("/api/shorturl", function (req, res) {
   if (httpsRegex.test(url)) {
     url = url.replace(removehttps, "");
     console.log(url);
-    dns.lookup(url, function (err, address, family) {
+    dns.lookup(url, function (err) {
       if (err) {
         res.json({ error: "Invalid Hostname" });
       } else {
